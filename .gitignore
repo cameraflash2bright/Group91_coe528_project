@@ -1,0 +1,10 @@
+# Ignore compiled outputs
+build/
+dist/
+
+# Ignore private NetBeans user settings
+nbproject/private/
+nbproject/project.properties
+
+# Ignore Mac OS hidden files 
+.DS_Store

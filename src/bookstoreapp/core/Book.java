@@ -6,7 +6,7 @@ package bookstoreapp.core;
 
 /**
  *
- * @author titan
+ * @author justin grewal 501165447
  */
 public class Book {
     private String name;

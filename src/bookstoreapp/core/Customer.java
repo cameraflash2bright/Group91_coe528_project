@@ -6,7 +6,7 @@ package bookstoreapp.core;
 
 /**
  *
- * @author titan
+ * @author 
  */
 public class Customer {
     

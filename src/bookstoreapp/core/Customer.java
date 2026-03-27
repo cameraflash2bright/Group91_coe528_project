@@ -21,10 +21,10 @@ public class Customer {
         this.points = 0;
         this.status = new SilverState();
     }
-    public String getUser(){
+    public String getUsername(){
         return username;
     }
-    public String getPass(){
+    public String getPassword(){
         return password;
     }
     public int getPoints(){

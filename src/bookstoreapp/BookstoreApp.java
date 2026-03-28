@@ -9,7 +9,6 @@ package bookstoreapp;
  * @author emilylam
  */
 
-package bookstoreapp;
 
 import bookstoreapp.core.Book;
 import bookstoreapp.core.Customer;

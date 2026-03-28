@@ -33,7 +33,7 @@ public class Customer {
     public State getStatus(){
         return status;
     }
-    public void setStatus(State Status){
+    public void setStatus(State status){
         this.status = status;
     }
     

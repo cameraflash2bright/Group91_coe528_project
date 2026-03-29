@@ -10,11 +10,29 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+/**
+ * Overview:
+ * OwnerCustomerPanel provides the owner interface for viewing, adding,
+ * and deleting bookstore customers. It displays all registered customers
+ * in a table and allows the owner to create new customer accounts or
+ * remove existing ones from the bookstore system.
+ */
 public class OwnerCustomerPanel extends JPanel {
     private DefaultTableModel model;
     private JTable table;
     private BookStoreGUI app;
 
+    /**
+     * Requires: app != null
+     * Modifies: this
+     * Effects: Creates the owner customer management panel, initializes
+     *          the table used to display customers, sets up the input
+     *          fields and buttons, and attaches listeners for adding,
+     *          deleting, and navigating back from the customer screen.
+     *
+     * @param app the main bookstore GUI controller used to access the
+     *        shared bookstore backend and screen navigation
+     */
     public OwnerCustomerPanel(BookStoreGUI app) {
         this.app = app;
         setLayout(new BorderLayout());
@@ -23,6 +41,16 @@ public class OwnerCustomerPanel extends JPanel {
         add(titleLabel, BorderLayout.NORTH);
 
         model = new DefaultTableModel(new String[]{"Username", "Password", "Points", "Status"}, 0) {
+            /**
+             * Requires: None
+             * Modifies: None
+             * Effects: Returns false so that table cells cannot be edited
+             *          directly by the user.
+             *
+             * @param row the row index of the cell
+             * @param column the column index of the cell
+             * @return false in all cases
+             */
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -65,18 +93,15 @@ public class OwnerCustomerPanel extends JPanel {
                 return;
             }
 
-            for (Customer customer : app.getStore().getCustomers()) {
-                if (customer.getUsername().equals(username)) {
-                    JOptionPane.showMessageDialog(this, "That username already exists.");
-                    return;
-                }
+            try {
+                app.getStore().addCustomer(username, password);
+                app.saveStore();
+                refreshTable();
+                usernameField.setText("");
+                passwordField.setText("");
+            } catch (IllegalArgumentException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage());
             }
-
-            app.getStore().addCustomer(username, password);
-            app.saveStore();
-            refreshTable();
-            usernameField.setText("");
-            passwordField.setText("");
         });
 
         deleteButton.addActionListener(e -> {
@@ -86,15 +111,27 @@ public class OwnerCustomerPanel extends JPanel {
                 return;
             }
 
-            Customer selectedCustomer = app.getStore().getCustomers().get(selectedRow);
-            app.getStore().deleteCustomer(selectedCustomer);
-            app.saveStore();
-            refreshTable();
+            try {
+                Customer selectedCustomer = app.getStore().getCustomers().get(selectedRow);
+                app.getStore().deleteCustomer(selectedCustomer);
+                app.saveStore();
+                refreshTable();
+            } catch (IllegalArgumentException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage());
+            }
         });
 
         backButton.addActionListener(e -> app.showScreen("ownerStart"));
     }
 
+    /**
+     * Requires: app != null and app.getStore() != null
+     * Modifies: this.model
+     * Effects: Clears the customer table and repopulates it with the
+     *          current list of registered customers from the bookstore.
+     *          Each row shows a customer's username, password, points,
+     *          and membership status.
+     */
     public void refreshTable() {
         model.setRowCount(0);
         for (Customer customer : app.getStore().getCustomers()) {

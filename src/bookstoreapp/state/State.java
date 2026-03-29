@@ -1,28 +1,42 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package bookstoreapp.state;
+
 import bookstoreapp.core.Customer;
+
 /**
+ * Overview:
+ * State represents a customer's membership level in the bookstore loyalty
+ * system. Concrete implementations such as SilverState and GoldState define
+ * how a customer's membership status is interpreted and when transitions to
+ * another state should occur.
  *
- * @author justin grewal 501165447
+ * Interface Invariant / Behavioral Contract:
+ * 1. Any implementation of State must represent a valid membership level.
+ * 2. getStatus() must return a non-null string describing the membership level.
+ * 3. checkStatus(context) must leave the customer in a valid state consistent
+ *    with the customer's current number of points.
+ *
+ *
  */
 public interface State {
+
     /**
-     * Checks customers point balance and updates membership state if necessary
-     * Requires: a valid customer object
-     * Modifies: context(the customers state)
-     * Effects:Changes the customers State to Silver or Gold based on the amount of accumulated points
+     * Requires: context != null
+     * Modifies: context
+     * Effects: Examines the given customer's current points and updates the
+     *          customer's membership state if a transition is required.
      *
+     * @param context the customer whose membership status is being checked
+     * @throws IllegalArgumentException if context is invalid, if enforced by
+     *         the implementing class
      */
     void checkStatus(Customer context);
+
     /**
-     * gets the string rep of the state
-     * Requires: none
-     * Modifies" none
-     * Effects: Returns "Silver" or "Gold" 
+     * Requires: None
+     * Modifies: None
+     * Effects: Returns the string representation of this membership state.
      *
+     * @return the name of the state, such as "Silver" or "Gold"
      */
     String getStatus();
 }
